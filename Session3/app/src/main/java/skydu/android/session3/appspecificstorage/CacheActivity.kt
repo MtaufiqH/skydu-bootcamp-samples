@@ -1,24 +1,28 @@
 package skydu.android.session3.appspecificstorage
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import skydu.android.session3.databinding.ActivityPersistStorageBinding
+import skydu.android.session3.databinding.ActivityCacheBinding
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 
-class PersistStorageActivity : AppCompatActivity() {
-
-    private val FILENAME = "fileName"
+/**
+ * Like Persist Storage, but different in:
+ * readFile: use cacheDir
+ * saveFile: use File.createTempFile
+ * deleteFile: use cacheDir
+ */
+class CacheActivity : AppCompatActivity() {
+    private val FILENAME = "cacheName"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityPersistStorageBinding.inflate(layoutInflater)
+        val binding = ActivityCacheBinding.inflate(layoutInflater)
 
         readFile().run {
-            if (this.isNotEmpty()) {
+            if(this.isNotEmpty()) {
                 binding.editText.setText(this)
             }
         }
@@ -34,8 +38,8 @@ class PersistStorageActivity : AppCompatActivity() {
     }
 
     private fun readFile(): String {
-        val file = File(this.filesDir, FILENAME)
-        if (file.exists()) {
+        val file = File(this.cacheDir, FILENAME)
+        if(file.exists()) {
             Toast.makeText(this, "Sudah ada data", Toast.LENGTH_SHORT).show()
             var data = "";
             file.bufferedReader().useLines { lines ->
@@ -54,8 +58,8 @@ class PersistStorageActivity : AppCompatActivity() {
     }
 
     private fun saveFile(text: String) {
-        val file = File(this.filesDir, FILENAME)
-        val fw = FileWriter(file.absoluteFile)
+        val cacheFile = File(this.cacheDir, FILENAME)
+        val fw = FileWriter(cacheFile.absoluteFile)
         val bw = BufferedWriter(fw)
         bw.write(text)
         bw.close()
@@ -63,8 +67,8 @@ class PersistStorageActivity : AppCompatActivity() {
     }
 
     private fun deleteFile() {
-        val file = File(this.filesDir, FILENAME)
-        if (file.exists()) {
+        val file = File(this.cacheDir, FILENAME)
+        if(file.exists()) {
             file.delete()
             Toast.makeText(this, "file berhasil di hapus", Toast.LENGTH_SHORT).show()
             finish()

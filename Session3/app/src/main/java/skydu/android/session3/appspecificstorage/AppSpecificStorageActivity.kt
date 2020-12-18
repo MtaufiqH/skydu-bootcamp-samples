@@ -14,6 +14,10 @@ class AppSpecificStorageActivity : AppCompatActivity() {
         binding.btnPersist.setOnClickListener {
             gotoActivity(PersistStorageActivity::class.java)
         }
+
+        binding.btnCache.setOnClickListener {
+            gotoActivity(CacheActivity::class.java)
+        }
         setContentView(binding.root)
     }
 
