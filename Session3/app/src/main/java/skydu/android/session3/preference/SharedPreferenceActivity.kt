@@ -29,6 +29,8 @@ class SharedPreferenceActivity : AppCompatActivity() {
             saveButtonClickCount(buttonClickCount)
         }
 
+
+
         setContentView(binding.root)
     }
 

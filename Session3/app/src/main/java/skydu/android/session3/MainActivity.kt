@@ -2,9 +2,10 @@ package skydu.android.session3
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import skydu.android.session3.appspecificstorage.AppSpecificStorageActivity
+import androidx.appcompat.app.AppCompatActivity
+import skydu.android.session3.appspecificstorage.CacheActivity
+import skydu.android.session3.appspecificstorage.PersistStorageActivity
 import skydu.android.session3.databinding.ActivityMainBinding
 import skydu.android.session3.preference.SharedPreferenceActivity
 import skydu.android.session3.sharedstorage.ImportExportActivity
@@ -15,8 +16,12 @@ class MainActivity : AppCompatActivity() {
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
 
-        binding.btnAppSpecificStorage.setOnClickListener {
-            gotoActivity(AppSpecificStorageActivity::class.java)
+        binding.btnAppSpecificStoragePersist.setOnClickListener {
+            gotoActivity(PersistStorageActivity::class.java)
+        }
+
+        binding.btnAppSpecificStorageCache.setOnClickListener {
+            gotoActivity(CacheActivity::class.java)
         }
 
         binding.btnSharedcStorage.setOnClickListener {

@@ -13,7 +13,6 @@
         <activity android:name=".sharedstorage.ImportExportActivity" />
         <activity android:name=".appspecificstorage.CacheActivity" />
         <activity android:name=".appspecificstorage.PersistStorageActivity" />
-        <activity android:name=".appspecificstorage.AppSpecificStorageActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

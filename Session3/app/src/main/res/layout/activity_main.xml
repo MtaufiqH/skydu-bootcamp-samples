@@ -7,9 +7,15 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_app_specific_storage"
+        android:id="@+id/btn_app_specific_storage_persist"
         android:layout_width="match_parent"
-        android:text="App Specific Storage"
+        android:text="App Specific Storage - Persist"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_app_specific_storage_cache"
+        android:layout_width="match_parent"
+        android:text="App Specific Storage - Cache"
         android:layout_height="wrap_content"/>
 
     <Button
