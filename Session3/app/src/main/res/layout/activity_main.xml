@@ -12,4 +12,10 @@
         android:text="App Specific Storage"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:id="@+id/btn_sharedc_storage"
+        android:layout_width="match_parent"
+        android:text="Shared Storage"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

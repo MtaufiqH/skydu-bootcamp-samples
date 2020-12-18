@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import skydu.android.session3.appspecificstorage.AppSpecificStorageActivity
 import skydu.android.session3.databinding.ActivityMainBinding
+import skydu.android.session3.sharedstorage.ImportExportActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +16,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnAppSpecificStorage.setOnClickListener {
             gotoActivity(AppSpecificStorageActivity::class.java)
+        }
 
+        binding.btnSharedcStorage.setOnClickListener {
+            gotoActivity(ImportExportActivity::class.java)
         }
         setContentView(binding.root)
     }
