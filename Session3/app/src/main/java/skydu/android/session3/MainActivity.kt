@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import skydu.android.session3.appspecificstorage.AppSpecificStorageActivity
 import skydu.android.session3.databinding.ActivityMainBinding
+import skydu.android.session3.preference.SharedPreferenceActivity
 import skydu.android.session3.sharedstorage.ImportExportActivity
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSharedcStorage.setOnClickListener {
             gotoActivity(ImportExportActivity::class.java)
+        }
+
+        binding.btnSharedPreference.setOnClickListener {
+            gotoActivity(SharedPreferenceActivity::class.java)
         }
         setContentView(binding.root)
     }
