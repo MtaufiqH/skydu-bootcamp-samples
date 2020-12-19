@@ -17,7 +17,7 @@ class RecipeViewHolder(
     ) {
         val context = binding.root.context
 
-        binding.txtName.text = recipe.name
+        binding.txtName.text = "#" + recipe.id + " " + recipe.name
         binding.imgRecipe.setImageResource(recipe.image)
         binding.btnBookmark.setOnClickListener { onBookmark() }
         binding.btnFavorite.setOnClickListener { onFavorite() }

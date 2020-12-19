@@ -12,7 +12,7 @@ interface RecipetDao {
     fun getById(id: Int): RecipeEntity
 
     @Insert
-    fun insert(recipe: RecipeEntity)
+    fun insert(recipe: RecipeEntity): Long
 
     @Update
     fun update(recipe: RecipeEntity)

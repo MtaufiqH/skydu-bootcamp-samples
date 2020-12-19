@@ -15,6 +15,7 @@ import skydu.android.recipeapp.thread.AppExecutors
 class RecipeActivity : AppCompatActivity() {
     private val menuDBid = 1;
     private val menuHardcodeId = 2;
+    private val menuCreateId = 3;
 
     private lateinit var recipeAdapter: RecipeAdapter
 
@@ -126,6 +127,7 @@ class RecipeActivity : AppCompatActivity() {
         menu?.run {
             this.add(0, menuDBid, 0, "Change to DB")
             this.add(0, menuHardcodeId, 0, "Change to Hardcode")
+            this.add(0, menuCreateId, 0, "Create")
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -143,35 +145,17 @@ class RecipeActivity : AppCompatActivity() {
             is_db_mode = false
             submitData(getData())
             Toast.makeText(this, "Ganti ke hardcode", Toast.LENGTH_SHORT).show()
+        } else if(item.itemId == menuCreateId) {
+            Intent(this, RecipeCreateActivity::class.java).run {
+                startActivity(this)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun refreshDbData() {
         db_list
-            .mapIndexed { index, recipeEntity ->
-                Recipe(
-                    name = recipeEntity.name,
-                    isFavorite = recipeEntity.isFavorite,
-                    isBookmark = recipeEntity.isBookmark,
-                    recipeBahan = recipeEntity.recipeBahan,
-                    recipeCara = recipeEntity.recipeCara,
-                    image = when (index % 4) {
-                        0 -> {
-                            R.drawable.img_recipe1
-                        }
-                        1 -> {
-                            R.drawable.img_recipe2
-                        }
-                        2 -> {
-                            R.drawable.img_recipe3
-                        }
-                        else -> {
-                            R.drawable.img_recipe4
-                        }
-                    }
-                )
-            }
+            .map { RecipeUtil.convert(it) }
             .run {
                 AppExecutors.getInstance().mainThread().execute {
                     submitData(this)

@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Recipe(
+    val id: Int = 0,
     val name: String,
     @DrawableRes val image: Int,
     val isFavorite: Boolean,
