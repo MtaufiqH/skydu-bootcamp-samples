@@ -31,6 +31,7 @@ class RecipeEditActivity : AppCompatActivity() {
             val name = bindings.edittextName.text.toString()
             val bahan = bindings.edittextBahan.text.toString()
             val cara = bindings.edittextCara.text.toString()
+            val notes = bindings.edittextNotes.text.toString()
 
             var success = true
             if(name.isEmpty()) {
@@ -57,7 +58,8 @@ class RecipeEditActivity : AppCompatActivity() {
                             bindings.bookmark.isChecked,
                             bindings.favorite.isChecked,
                             bahan,
-                            cara
+                            cara,
+                            notes
                         )
                     )
                     finish()

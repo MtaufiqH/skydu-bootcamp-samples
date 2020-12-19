@@ -29,7 +29,8 @@ object AppDatabaseHelper {
                                             false,
                                             false,
                                             "bahan $i",
-                                            "cara $i"
+                                            "cara $i",
+                                            "notes $i",
                                         )
                                     )
                                 }
@@ -37,6 +38,7 @@ object AppDatabaseHelper {
                         }
                     }
                 })
+                .addMigrations(AppDatabaseMigrations.getMigrationsV1to2())
                 .build()
         }
         return instance!!

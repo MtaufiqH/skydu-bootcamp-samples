@@ -69,5 +69,25 @@
 
         </TextView>
 
+        <TextView
+            android:id="@+id/txtSubtitleNotes"
+            style="@style/TextResep.Subtitle"
+            android:text="Notes"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtCara">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/txtNotes"
+            style="@style/TextResep"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtSubtitleNotes"
+            tools:text="Notesss">
+
+        </TextView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

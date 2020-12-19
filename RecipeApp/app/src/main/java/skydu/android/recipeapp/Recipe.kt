@@ -26,7 +26,8 @@ data class Recipe(
         4. Tambahkan gula, kayu manis dan cengkeh. Aduk dan masak hingga menjadi selai. Sisihkan.Ambil bulatan adonan tadi, pipihkan lalu isi dengan selai nanas. Lalu bentuk kembali menjadi bola-bola kecil.
         5. Oleskan atasnya dengan kuning telur dan tancapkan 1 buah cengkeh setiap nastar. Panggang selama 40 menit pada suhu 175℃.
         6. Setelah matang, biarkan hingga dingin lalu masukkan dalam toples kesukaanmu.
-    """.trimIndent()
+    """.trimIndent(),
+    val notes: String?
 ) : BundleParam
 
 interface BundleParam : Parcelable {

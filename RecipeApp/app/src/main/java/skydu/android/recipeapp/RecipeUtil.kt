@@ -24,7 +24,8 @@ object RecipeUtil {
                 else -> {
                     R.drawable.img_recipe4
                 }
-            }
+            },
+            notes = recipeEntity.notes
         )
     }
 }

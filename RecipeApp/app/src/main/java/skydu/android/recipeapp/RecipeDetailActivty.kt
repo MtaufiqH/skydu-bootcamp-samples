@@ -28,6 +28,8 @@ class RecipeDetailActivty : AppCompatActivity() {
 
         binding.txtBahan.text = recipe.recipeBahan
         binding.txtCara.text = recipe.recipeCara
+        
+        binding.txtNotes.text = recipe.notes
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -51,7 +53,7 @@ class RecipeDetailActivty : AppCompatActivity() {
         }else if(item.itemId == menuDeleteId) {
            AppExecutors.getInstance().diskIO().execute {
                AppDatabaseHelper.getInstance(this).recipeDao().delete(
-                   RecipeEntity(recipe.id, "",false, false, "","")
+                   RecipeEntity(recipe.id, "",false, false, "","","")
                )
                finish()
            }
