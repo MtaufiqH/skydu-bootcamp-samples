@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import skydu.android.recipeapp.databinding.ItemRecipeBinding
 
 class RecipeAdapter(
-    private val onItemClick: (Recipe) -> Unit
+    private val onItemClick: (Recipe) -> Unit,
+    private val onFavClick: (Int) -> Unit,
+    private val onBookmarkClick: (Int) -> Unit
 ) : RecyclerView.Adapter<RecipeViewHolder>() {
 
     private val recipes: MutableList<Recipe> = mutableListOf()
@@ -31,12 +33,14 @@ class RecipeAdapter(
     private fun toggleFavorite(pos: Int) {
         val current = recipes[pos]
         recipes[pos] = current.copy(isFavorite = !current.isFavorite)
+        onFavClick(pos)
         notifyItemChanged(pos)
     }
 
     private fun toggleBookmark(pos: Int) {
         val current = recipes[pos]
         recipes[pos] = current.copy(isBookmark = !current.isBookmark)
+        onBookmarkClick(pos)
         notifyItemChanged(pos)
     }
 
