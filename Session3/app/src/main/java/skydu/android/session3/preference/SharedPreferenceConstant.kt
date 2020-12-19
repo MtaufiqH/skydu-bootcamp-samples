@@ -6,4 +6,6 @@ object SharedPreferenceConstant {
     const val VISIT_PAGE_COUNT_KEY = "VISIT_PAGE_COUNT_KEY"
 
     const val BUTTON_CLICK_COUNT_KEY = "BUTTON_CLICK_COUNT_KEY"
+
+    const val USER_NAME_KEY = "USER_NAME_KEY"
 }

@@ -16,6 +16,7 @@ class SharedPreferenceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySharedPreferenceBinding.inflate(layoutInflater)
         pref = getSharedPreferences(SharedPreferenceConstant.PREF_NAME, Context.MODE_PRIVATE);
+
         val visitCount = pref.getInt(SharedPreferenceConstant.VISIT_PAGE_COUNT_KEY, 0) + 1
         saveVisitCount(visitCount)
         binding.textViewVisit.text =
@@ -29,7 +30,12 @@ class SharedPreferenceActivity : AppCompatActivity() {
             saveButtonClickCount(buttonClickCount)
         }
 
+        val name = pref.getString(SharedPreferenceConstant.USER_NAME_KEY, "")
+        binding.edittextName.setText(name)
 
+        binding.btnSaveName.setOnClickListener {
+            saveName(binding.edittextName.text.toString())
+        }
 
         setContentView(binding.root)
     }
@@ -46,5 +52,9 @@ class SharedPreferenceActivity : AppCompatActivity() {
 
     private fun saveButtonClickCount(clickCount: Int) {
         pref.edit().putInt(SharedPreferenceConstant.BUTTON_CLICK_COUNT_KEY, clickCount).apply()
+    }
+
+    private fun saveName(name: String) {
+        pref.edit().putString(SharedPreferenceConstant.USER_NAME_KEY, name).apply()
     }
 }
