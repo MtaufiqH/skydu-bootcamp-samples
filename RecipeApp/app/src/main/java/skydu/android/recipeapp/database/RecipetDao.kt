@@ -18,5 +18,5 @@ interface RecipetDao {
     fun update(recipe: RecipeEntity)
 
     @Delete
-    fun delete(recipe: Recipe)
+    fun delete(recipe: RecipeEntity)
 }
