@@ -13,15 +13,11 @@ import skydu.android.recipeapp.databinding.ActivtyRecipeBinding
 import skydu.android.recipeapp.thread.AppExecutors
 
 class RecipeActivity : AppCompatActivity() {
-    private val menuDBid = 1;
-    private val menuHardcodeId = 2;
     private val menuCreateId = 3;
 
     private lateinit var recipeAdapter: RecipeAdapter
 
     private var db_list: List<RecipeEntity> = emptyList()
-
-    private var is_db_mode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +35,15 @@ class RecipeActivity : AppCompatActivity() {
         }
 
         val onBookmarkClick = { pos: Int ->
-            if(is_db_mode) {
-                db_list[pos].isBookmark = !db_list[pos].isBookmark
-                updateRecipe(db_list[pos])
-            }
+
+            db_list[pos].isBookmark = !db_list[pos].isBookmark
+            updateRecipe(db_list[pos])
+
         }
 
         val onFavClick = { pos: Int ->
-            if(is_db_mode) {
-                db_list[pos].isFavorite = !db_list[pos].isFavorite
-                updateRecipe(db_list[pos])
-            }
+            db_list[pos].isFavorite = !db_list[pos].isFavorite
+            updateRecipe(db_list[pos])
         }
 
         recipeAdapter = RecipeAdapter(onItemClick, onFavClick, onBookmarkClick)
@@ -60,8 +54,16 @@ class RecipeActivity : AppCompatActivity() {
 
 
             layoutManager = GridLayoutManager(this@RecipeActivity, 2)
-            adapter = recipeAdapter.apply {
-                submitData(getData())
+            adapter = recipeAdapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        AppExecutors.getInstance().diskIO().execute {
+            AppDatabaseHelper.getInstance(this).recipeDao().getAll().run {
+                db_list = this
+                refreshDbData()
             }
         }
     }
@@ -72,80 +74,15 @@ class RecipeActivity : AppCompatActivity() {
         }
     }
 
-    private fun getData() = listOf(
-        Recipe(
-            name = "Kue Nastar",
-            image = R.drawable.img_recipe1,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Putri Salju",
-            image = R.drawable.img_recipe2,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Kastengel",
-            image = R.drawable.img_recipe3,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Sagu Keju",
-            image = R.drawable.img_recipe4,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Ayam Woku",
-            image = R.drawable.img_recipe1,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Rendang Iga",
-            image = R.drawable.img_recipe2,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Sup Labu Keju",
-            image = R.drawable.img_recipe3,
-            isFavorite = false,
-            isBookmark = false
-        ),
-        Recipe(
-            name = "Pasta a la Mamah",
-            image = R.drawable.img_recipe4,
-            isFavorite = false,
-            isBookmark = false
-        )
-    )
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.run {
-            this.add(0, menuDBid, 0, "Change to DB")
-            this.add(0, menuHardcodeId, 0, "Change to Hardcode")
             this.add(0, menuCreateId, 0, "Create")
         }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == menuDBid) {
-            is_db_mode = true
-            AppExecutors.getInstance().diskIO().execute {
-                AppDatabaseHelper.getInstance(this).recipeDao().getAll().run {
-                    db_list = this
-                    refreshDbData()
-                }
-            }
-        } else if (item.itemId == menuHardcodeId) {
-            is_db_mode = false
-            submitData(getData())
-            Toast.makeText(this, "Ganti ke hardcode", Toast.LENGTH_SHORT).show()
-        } else if(item.itemId == menuCreateId) {
+       if (item.itemId == menuCreateId) {
             Intent(this, RecipeCreateActivity::class.java).run {
                 startActivity(this)
             }
