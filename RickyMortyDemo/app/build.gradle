@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "skydu.android.rickymortydemo"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
