@@ -5,11 +5,9 @@ import skydu.android.instaclone.data.repository.PostRepository
 import skydu.android.instaclone.data.repository.UserRepository
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.data.repository.model.PostViewData
+import skydu.android.instaclone.ui.base.BaseViewModel
 
-class HomeViewModel : ViewModel() {
-    private val userRepository: UserRepository = UserRepository()
-
-    private val triggerLogOut = MutableLiveData<Unit>()
+class HomeViewModel : BaseViewModel() {
 
     private val toggleLike: MutableLiveData<LikeData> = MutableLiveData()
 
@@ -61,14 +59,9 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    val loggedOutEvent = triggerLogOut.switchMap {
-        userRepository.doLogout()
-    }
 
 
-    fun triggerLogout() {
-        triggerLogOut.value = Unit
-    }
+
 
     fun loadNextPage() {
         if (!isLoading) {

@@ -13,9 +13,11 @@ import skydu.android.instaclone.ui.login.LoginActivity
 import skydu.android.instaclone.utils.LoadingDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import skydu.android.instaclone.ui.base.BaseActivity
 import skydu.android.instaclone.ui.home.post.PostsAdapter
+import skydu.android.instaclone.ui.profile.ProfileActivity
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
     private lateinit var postsAdapter: PostsAdapter
 
@@ -40,7 +42,9 @@ class HomeActivity : AppCompatActivity() {
 
         postsAdapter = PostsAdapter(
             {
-                Toast.makeText(this, "Go to Profile", Toast.LENGTH_SHORT).show()
+                Intent(this, ProfileActivity::class.java).run {
+                    putExtra("username", it.username)
+                }
             },
             {
                 viewModel.onLikeClicked(it)
@@ -73,27 +77,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        val logoutDialog = LoadingDialog.get(this, getString(R.string.logout))
-
-        viewModel.loggedOutEvent.observe(this) {
-            when (it.state) {
-                DataResult.State.SUCCESS -> {
-                    logoutDialog.dismiss()
-                    startActivity(Intent(applicationContext, LoginActivity::class.java))
-                    finish()
-                }
-                DataResult.State.LOADING -> {
-                    logoutDialog.show()
-                }
-                else -> {
-                    it.errorMessage?.run {
-                        Toast.makeText(this@HomeActivity, this, Toast.LENGTH_SHORT).show()
-                    }
-                    logoutDialog.dismiss()
-                }
-            }
-        }
-
+        setupBaseObservers(viewModel)
         val likeLoading = LoadingDialog.get(this, resources.getString(R.string.like_loading))
         val unLikeLoading = LoadingDialog.get(this, resources.getString(R.string.unlike_loading))
 
