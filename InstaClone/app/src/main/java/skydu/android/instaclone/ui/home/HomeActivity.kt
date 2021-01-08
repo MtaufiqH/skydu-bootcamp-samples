@@ -44,6 +44,7 @@ class HomeActivity : BaseActivity() {
             {
                 Intent(this, ProfileActivity::class.java).run {
                     putExtra("username", it.username)
+                    startActivity(this)
                 }
             },
             {
