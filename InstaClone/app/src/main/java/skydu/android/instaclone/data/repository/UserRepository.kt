@@ -39,6 +39,10 @@ class UserRepository {
             }
         }
 
+    fun isUserLoggedIn(): LiveData<Boolean> = liveData(Dispatchers.IO) {
+        emit(!userPreferences.getUserName().isNullOrEmpty())
+    }
+
 
     private fun saveCurrentUser(loginReponse: LoginResponse) {
         userPreferences.setUserName(loginReponse.profile.username)

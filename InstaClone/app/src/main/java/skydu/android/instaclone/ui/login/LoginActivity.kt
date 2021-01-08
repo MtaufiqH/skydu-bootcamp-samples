@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.databinding.ActivityLoginBinding
+import skydu.android.instaclone.ui.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
     private val vm: LoginViewModel by viewModels()
@@ -27,8 +28,9 @@ class LoginActivity : AppCompatActivity() {
         vm.loginState.observe(this) {
             when(it.state) {
                 DataResult.State.SUCCESS -> {
-                    Toast.makeText(this@LoginActivity, "SUKSES", Toast.LENGTH_SHORT).show()
-                    //todo navigate ke homepage
+                    Intent(this, HomeActivity::class.java).run {
+                        startActivity(this)
+                    }
                 }
                 DataResult.State.LOADING -> {
                     binding.pbLoading.visibility = View.VISIBLE
