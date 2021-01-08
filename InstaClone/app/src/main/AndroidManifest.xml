@@ -12,7 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.post.PostDetailActivity"></activity>
+        <activity android:name=".ui.post.PostDetailActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="https"/>
+                <data
+                    android:scheme="http"/>
+                <data
+                    android:host="www.instaclone.com"/>
+                <data
+                    android:pathPattern="/post/detail/.*"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.profile.ProfileActivity" />

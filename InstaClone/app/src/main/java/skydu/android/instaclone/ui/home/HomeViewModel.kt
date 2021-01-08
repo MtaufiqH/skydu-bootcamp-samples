@@ -59,8 +59,9 @@ class HomeViewModel : BaseViewModel() {
         }
     }
 
+    private val _shareUrl = MutableLiveData<String>()
 
-
+    val shareUrl: LiveData<String> = _shareUrl
 
 
     fun loadNextPage() {
@@ -71,6 +72,10 @@ class HomeViewModel : BaseViewModel() {
 
     fun onLikeClicked(it: PostViewData) {
         toggleLike.postValue(LikeData(it.id, it.is_liked))
+    }
+
+    fun onShareClicked(it: PostViewData) {
+        _shareUrl.postValue("https://www.instaclone.com/post/detail/" + it.id)
     }
 
 

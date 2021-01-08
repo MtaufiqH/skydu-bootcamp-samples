@@ -17,15 +17,30 @@ import skydu.android.instaclone.ui.post.adapter.CommentItemDecoration
 import skydu.android.instaclone.ui.profile.ProfileActivity
 import skydu.android.instaclone.utils.LoadingDialog
 import skydu.android.instaclone.utils.ResourceUtil
+import java.lang.NumberFormatException
 
 class PostDetailActivity : BaseActivity() {
     lateinit var binding: ActivityPostDetailBinding
 
     lateinit var commentAdapter: CommentAdapter
 
-
     private val postId: Int by lazy {
-        intent.getIntExtra("id", -1)
+        var id = intent.getIntExtra("id", -1)
+        if (id == -1) {
+            intent.data?.run {
+                try {
+                    id = this.lastPathSegment?.toInt() ?: -1
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(
+                        this@PostDetailActivity,
+                        "postId harus angka",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+            }
+        }
+        id
     }
 
     private val viewModel: PostDetailViewModel by viewModels {

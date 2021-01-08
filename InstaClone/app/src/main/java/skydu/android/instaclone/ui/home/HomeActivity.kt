@@ -52,7 +52,7 @@ class HomeActivity : BaseActivity() {
                 viewModel.onLikeClicked(it)
             },
             {
-                Toast.makeText(this, "Shared Clicked", Toast.LENGTH_SHORT).show()
+                viewModel.onShareClicked(it)
             },
             {
                 Intent(this, PostDetailActivity::class.java).run {
@@ -108,7 +108,13 @@ class HomeActivity : BaseActivity() {
                     } else {
                         likeLoading.hide()
                     }
-                    it.errorMessage?.run { Toast.makeText(this@HomeActivity, this, Toast.LENGTH_SHORT).show() }
+                    it.errorMessage?.run {
+                        Toast.makeText(
+                            this@HomeActivity,
+                            this,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -117,7 +123,7 @@ class HomeActivity : BaseActivity() {
             when (it.state) {
                 DataResult.State.SUCCESS -> {
                     it.data?.run {
-                        if(this.firstPage) {
+                        if (this.firstPage) {
                             postsAdapter.updateList(this.list)
                         } else {
                             postsAdapter.appendData(this.list)
@@ -129,7 +135,7 @@ class HomeActivity : BaseActivity() {
                 }
                 DataResult.State.LOADING -> {
                     it.data?.run {
-                        if(this.firstPage) {
+                        if (this.firstPage) {
                             binding.progressBarFull.visibility = View.VISIBLE
                             binding.progressBarBottom.visibility = View.GONE
                             binding.rvPosts.visibility = View.GONE
@@ -142,11 +148,29 @@ class HomeActivity : BaseActivity() {
                     }
                 }
                 else -> {
-                    it.errorMessage?.run { Toast.makeText(this@HomeActivity, this, Toast.LENGTH_SHORT).show() }
+                    it.errorMessage?.run {
+                        Toast.makeText(
+                            this@HomeActivity,
+                            this,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                     binding.progressBarFull.visibility = View.GONE
                     binding.progressBarBottom.visibility = View.GONE
                     binding.rvPosts.visibility = View.VISIBLE
                 }
+            }
+        }
+
+        viewModel.shareUrl.observe(this) {
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, it)
+                type = "text/plain"
+            }.run {
+                startActivity(
+                    Intent.createChooser(this, null)
+                )
             }
         }
     }
