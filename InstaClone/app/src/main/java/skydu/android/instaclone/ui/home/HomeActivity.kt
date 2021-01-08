@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
                 Toast.makeText(this, "Go to Profile", Toast.LENGTH_SHORT).show()
             },
             {
-                Toast.makeText(this, "Like Clicked", Toast.LENGTH_SHORT).show()
+                viewModel.onLikeClicked(it)
             },
             {
                 Toast.makeText(this, "Shared Clicked", Toast.LENGTH_SHORT).show()
@@ -90,6 +90,37 @@ class HomeActivity : AppCompatActivity() {
                         Toast.makeText(this@HomeActivity, this, Toast.LENGTH_SHORT).show()
                     }
                     logoutDialog.dismiss()
+                }
+            }
+        }
+
+        val likeLoading = LoadingDialog.get(this, resources.getString(R.string.like_loading))
+        val unLikeLoading = LoadingDialog.get(this, resources.getString(R.string.unlike_loading))
+
+        viewModel.like.observe(this) {
+            when (it.state) {
+                DataResult.State.SUCCESS -> {
+                    if (it.data?.isCurrentlyLiked ?: false) {
+                        unLikeLoading.hide()
+                    } else {
+                        likeLoading.hide()
+                    }
+                    postsAdapter.updateLike(it.data?.postId ?: -1)
+                }
+                DataResult.State.LOADING -> {
+                    if (it.data?.isCurrentlyLiked ?: false) {
+                        unLikeLoading.show()
+                    } else {
+                        likeLoading.show()
+                    }
+                }
+                else -> {
+                    if (it.data?.isCurrentlyLiked ?: false) {
+                        unLikeLoading.hide()
+                    } else {
+                        likeLoading.hide()
+                    }
+                    it.errorMessage?.run { Toast.makeText(this@HomeActivity, this, Toast.LENGTH_SHORT).show() }
                 }
             }
         }

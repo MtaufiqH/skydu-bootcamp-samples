@@ -53,4 +53,19 @@ class PostRepository {
                 emit(DataResult<List<PostViewData>>(result.state, null, result.errorMessage))
             }
         }
+
+    fun doToggleLike(postId: Int): LiveData<DataResult<Unit>> =
+        liveData {
+            emit(DataResult<Unit>(DataResult.State.LOADING, null, null))
+
+            val result =
+                try {
+                    networkService.doToggleLike(postId).convertToDataResult()
+                } catch (e: Exception) {
+                    e.convertExceptionToError()
+                }
+
+            emit(DataResult<Unit>(result.state, null, result.errorMessage))
+
+        }
 }

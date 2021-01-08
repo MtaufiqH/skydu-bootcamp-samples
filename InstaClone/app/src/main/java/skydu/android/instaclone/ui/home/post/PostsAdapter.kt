@@ -37,4 +37,18 @@ class PostsAdapter(
         dataList.addAll(list)
         notifyDataSetChanged()
     }
+
+    fun updateLike(postId: Int) {
+        dataList.find {
+            it.id == postId
+        }?.run {
+            this.is_liked = !is_liked
+            if (is_liked) {
+                likes_count += 1
+            } else {
+                likes_count -= 1
+            }
+            notifyDataSetChanged()
+        }
+    }
 }

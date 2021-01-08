@@ -11,6 +11,8 @@ class HomeViewModel : ViewModel() {
 
     private val triggerLogOut = MutableLiveData<Unit>()
 
+    private val toggleLike: MutableLiveData<LikeData> = MutableLiveData()
+
     private val postRepository: PostRepository = PostRepository()
 
     private val page: MutableLiveData<Int> = MutableLiveData()
@@ -32,7 +34,7 @@ class HomeViewModel : ViewModel() {
                         emit(
                             DataResult(
                                 it.state,
-                                PostResult(page ==1, it.data?: emptyList()),
+                                PostResult(page == 1, it.data ?: emptyList()),
                                 it.errorMessage,
                             )
                         )
@@ -40,6 +42,24 @@ class HomeViewModel : ViewModel() {
                 }
             }
         }
+
+    val like: LiveData<DataResult<LikeData>> = toggleLike.switchMap { likeData ->
+        postRepository.doToggleLike(likeData.postId).switchMap {
+            liveData {
+                if (it.state == DataResult.State.UNAUTHORIZED) {
+                    triggerLogout()
+                } else {
+                    emit(
+                        DataResult(
+                            it.state,
+                            likeData,
+                            it.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
 
     val loggedOutEvent = triggerLogOut.switchMap {
         userRepository.doLogout()
@@ -56,6 +76,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun onLikeClicked(it: PostViewData) {
+        toggleLike.postValue(LikeData(it.id, it.is_liked))
+    }
 
+
+    class LikeData(val postId: Int, val isCurrentlyLiked: Boolean)
     class PostResult(val firstPage: Boolean, val list: List<PostViewData>)
 }
