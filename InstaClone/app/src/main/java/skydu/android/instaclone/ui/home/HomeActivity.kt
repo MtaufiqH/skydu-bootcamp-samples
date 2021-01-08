@@ -12,6 +12,7 @@ import skydu.android.instaclone.databinding.ActivityHomeBinding
 import skydu.android.instaclone.ui.login.LoginActivity
 import skydu.android.instaclone.utils.LoadingDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import skydu.android.instaclone.ui.home.post.PostsAdapter
 
 class HomeActivity : AppCompatActivity() {
@@ -56,6 +57,17 @@ class HomeActivity : AppCompatActivity() {
         binding.rvPosts.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = postsAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    layoutManager?.run {
+                        if (this is LinearLayoutManager
+                            && itemCount > 0
+                            && itemCount == findLastVisibleItemPosition() + 1
+                        ) viewModel.loadNextPage()
+                    }
+                }
+            })
         }
         setupObservers()
     }
@@ -86,16 +98,29 @@ class HomeActivity : AppCompatActivity() {
             when (it.state) {
                 DataResult.State.SUCCESS -> {
                     it.data?.run {
-                        postsAdapter.updateList(this)
+                        if(this.firstPage) {
+                            postsAdapter.updateList(this.list)
+                        } else {
+                            postsAdapter.appendData(this.list)
+                        }
                     }
                     binding.rvPosts.visibility = View.VISIBLE
                     binding.progressBarFull.visibility = View.GONE
                     binding.progressBarBottom.visibility = View.GONE
                 }
                 DataResult.State.LOADING -> {
-                    binding.progressBarFull.visibility = View.VISIBLE
-                    binding.progressBarBottom.visibility = View.GONE
-                    binding.rvPosts.visibility = View.GONE
+                    it.data?.run {
+                        if(this.firstPage) {
+                            binding.progressBarFull.visibility = View.VISIBLE
+                            binding.progressBarBottom.visibility = View.GONE
+                            binding.rvPosts.visibility = View.GONE
+                        } else {
+                            binding.progressBarFull.visibility = View.GONE
+                            binding.progressBarBottom.visibility = View.VISIBLE
+                            binding.rvPosts.visibility = View.VISIBLE
+
+                        }
+                    }
                 }
                 else -> {
                     it.errorMessage?.run { Toast.makeText(this@HomeActivity, this, Toast.LENGTH_SHORT).show() }
