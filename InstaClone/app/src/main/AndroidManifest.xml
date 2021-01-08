@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="skydu.android.instaclone">
 
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".CustomApplication"
         android:allowBackup="true"
