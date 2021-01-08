@@ -33,6 +33,9 @@
     <string name="like_loading">Liking Post</string>
     <string name="unlike_loading">Unliking Post</string>
 
+
+    <string name="submit_comment">Submitting Comment</string>
+
     <!--photo-->
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>

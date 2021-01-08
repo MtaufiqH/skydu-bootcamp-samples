@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import skydu.android.instaclone.R
 import skydu.android.instaclone.data.repository.model.CommentViewData
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.databinding.ActivityPostDetailBinding
@@ -13,6 +15,8 @@ import skydu.android.instaclone.ui.base.BaseActivity
 import skydu.android.instaclone.ui.post.adapter.CommentAdapter
 import skydu.android.instaclone.ui.post.adapter.CommentItemDecoration
 import skydu.android.instaclone.ui.profile.ProfileActivity
+import skydu.android.instaclone.utils.LoadingDialog
+import skydu.android.instaclone.utils.ResourceUtil
 
 class PostDetailActivity : BaseActivity() {
     lateinit var binding: ActivityPostDetailBinding
@@ -47,6 +51,15 @@ class PostDetailActivity : BaseActivity() {
                 CommentItemDecoration(this@PostDetailActivity)
             )
         }
+
+        binding.tvPost.isEnabled = false
+        binding.etComment.addTextChangedListener {
+            viewModel.onEditTextChanged(it?.toString() ?: "")
+        }
+
+        binding.tvPost.setOnClickListener {
+            viewModel.doComment()
+        }
         setupObservers()
     }
 
@@ -79,6 +92,43 @@ class PostDetailActivity : BaseActivity() {
                     binding.layoutComment.visibility = View.GONE
                 }
 
+            }
+        }
+
+        viewModel.comment.observe(this) {
+            when (it.state) {
+                DataResult.State.SUCCESS -> {
+                    binding.tvPost.isEnabled = true
+                    if (!binding.etComment.text.toString().equals(it.data)) {
+                        binding.etComment.setText(it?.data)
+                    }
+                }
+                else -> {
+                    binding.tvPost.isEnabled = false
+                }
+            }
+        }
+
+        val loading = LoadingDialog.get(this, ResourceUtil.getString(R.string.submit_comment))
+
+        viewModel.submitComment.observe(this) {
+            when (it.state) {
+                DataResult.State.SUCCESS -> {
+                    loading.dismiss()
+                }
+                DataResult.State.LOADING -> {
+                    loading.show()
+                }
+                else -> {
+                    it.errorMessage?.run {
+                        Toast.makeText(
+                            this@PostDetailActivity,
+                            this,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    loading.dismiss()
+                }
             }
         }
     }

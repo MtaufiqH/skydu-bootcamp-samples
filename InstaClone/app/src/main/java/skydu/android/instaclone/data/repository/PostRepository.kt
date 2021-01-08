@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import skydu.android.instaclone.data.remote.NetworkService
 import skydu.android.instaclone.data.remote.Networking
+import skydu.android.instaclone.data.remote.comment.CommentRequest
 import skydu.android.instaclone.data.repository.model.CommentViewData
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.data.repository.model.PostViewData
@@ -119,6 +120,19 @@ class PostRepository {
                 emit(DataResult<List<CommentViewData>>(result.state, null, result.errorMessage))
             }
         }
+
+    fun doComment(postId: Int, comment: String): LiveData<DataResult<Unit>> = liveData {
+        emit(DataResult<Unit>(DataResult.State.LOADING, null, null))
+
+        val result =
+            try {
+                networkService.doComment(CommentRequest(postId, comment)).convertToDataResult()
+            } catch (e: Exception) {
+                e.convertExceptionToError()
+            }
+
+        emit(result)
+    }
 }
 
 
