@@ -1,7 +1,10 @@
 package skydu.android.instaclone.ui.login
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.databinding.ActivityLoginBinding
@@ -21,6 +24,21 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
+        vm.loginState.observe(this) {
+            when(it.state) {
+                DataResult.State.SUCCESS -> {
+                    Toast.makeText(this@LoginActivity, "SUKSES", Toast.LENGTH_SHORT).show()
+                    //todo navigate ke homepage
+                }
+                DataResult.State.LOADING -> {
+                    binding.pbLoading.visibility = View.VISIBLE
+                }
+                else -> {
+                    it.errorMessage?.run { Toast.makeText(this@LoginActivity, this, Toast.LENGTH_SHORT).show() }
+                    binding.pbLoading.visibility = View.GONE
+                }
+            }
+        }
         vm.emailValidation.observe(this) {
             when (it.state) {
                 DataResult.State.ERROR -> {

@@ -1,17 +1,29 @@
 package skydu.android.instaclone.ui.login
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.utils.ResourceUtil
 import skydu.android.instaclone.R
+import skydu.android.instaclone.data.repository.UserRepository
 
 class LoginViewModel : ViewModel() {
     private val _emailValidation: MutableLiveData<DataResult<Unit>> = MutableLiveData()
     private val _passwordValidation: MutableLiveData<DataResult<Unit>> = MutableLiveData()
+    private val loginAttempt: MutableLiveData<Pair<String, String>> = MutableLiveData()
+    private val userRepository = UserRepository()
 
 
     val emailValidation: LiveData<DataResult<Unit>> = _emailValidation
     val passwordValidation: LiveData<DataResult<Unit>> = _passwordValidation
+
+    val loginState: LiveData<DataResult<Unit>> = loginAttempt.switchMap {
+        userRepository.doUserLogin(it.first, it.second)
+    }.switchMap {
+        liveData(Dispatchers.IO) {
+            emit(it)
+        }
+    }
 
     fun onLogin(username: String, password: String) {
         var validated = true
@@ -45,7 +57,7 @@ class LoginViewModel : ViewModel() {
             )
         }
         if (validated) {
-            //todo login here
+            loginAttempt.postValue(Pair(username, password))
         }
     }
 }
