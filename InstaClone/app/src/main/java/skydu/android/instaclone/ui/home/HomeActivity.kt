@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import skydu.android.instaclone.ui.base.BaseActivity
 import skydu.android.instaclone.ui.home.post.PostsAdapter
+import skydu.android.instaclone.ui.post.PostDetailActivity
 import skydu.android.instaclone.ui.profile.ProfileActivity
 
 class HomeActivity : BaseActivity() {
@@ -54,8 +55,10 @@ class HomeActivity : BaseActivity() {
                 Toast.makeText(this, "Shared Clicked", Toast.LENGTH_SHORT).show()
             },
             {
-                Toast.makeText(this, "Go to Post Detail", Toast.LENGTH_SHORT).show()
-
+                Intent(this, PostDetailActivity::class.java).run {
+                    putExtra("id", it.id)
+                    startActivity(this)
+                }
             }
         )
 

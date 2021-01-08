@@ -5,6 +5,7 @@ import retrofit2.http.*
 import skydu.android.instaclone.data.remote.common.ApiResponse
 import skydu.android.instaclone.data.remote.login.LoginRequest
 import skydu.android.instaclone.data.remote.login.LoginResponse
+import skydu.android.instaclone.data.remote.post.PostResponseWithComment
 import skydu.android.instaclone.data.remote.post.PostsResponse
 import skydu.android.instaclone.data.remote.profile.ProfileResponse
 
@@ -25,4 +26,8 @@ interface NetworkService {
 
     @GET("api/profile/{username}")
     suspend fun getProfile(@Path("username") username: String): Response<ApiResponse<ProfileResponse>>
+
+    @GET("api/posts/{postId}")
+    suspend fun getPostDetail(@Path("postId") postId: Int): Response<ApiResponse<PostResponseWithComment>>
+
 }

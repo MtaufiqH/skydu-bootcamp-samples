@@ -1,5 +1,6 @@
 package skydu.android.instaclone.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.databinding.ActivityProfileBinding
 import skydu.android.instaclone.ui.base.BaseActivity
+import skydu.android.instaclone.ui.post.PostDetailActivity
 import skydu.android.instaclone.ui.profile.adapter.ProfileAdapter
 
 class ProfileActivity : BaseActivity() {
@@ -28,7 +30,10 @@ class ProfileActivity : BaseActivity() {
         setContentView(binding.root)
 
         profileAdapter = ProfileAdapter {
-           //todo post detail
+            Intent(this, PostDetailActivity::class.java).run {
+                putExtra("id", it.id)
+                startActivity(this)
+            }
         }
 
 

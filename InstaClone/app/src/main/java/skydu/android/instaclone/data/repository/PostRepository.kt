@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import skydu.android.instaclone.data.remote.NetworkService
 import skydu.android.instaclone.data.remote.Networking
+import skydu.android.instaclone.data.repository.model.CommentViewData
 import skydu.android.instaclone.data.repository.model.DataResult
 import skydu.android.instaclone.data.repository.model.PostViewData
 import skydu.android.instaclone.utils.TimeUtils
@@ -68,4 +69,56 @@ class PostRepository {
             emit(DataResult<Unit>(result.state, null, result.errorMessage))
 
         }
+
+    fun fetchPostDetail(postId: Int): LiveData<DataResult<List<CommentViewData>>> =
+        liveData {
+            emit(DataResult<List<CommentViewData>>(DataResult.State.LOADING, null, null))
+
+            val result =
+                try {
+                    networkService.getPostDetail(postId).convertToDataResult()
+                } catch (e: Exception) {
+                    e.convertExceptionToError()
+                }
+
+            if (result.state == DataResult.State.SUCCESS) {
+                result.data?.let { item ->
+                    arrayListOf<CommentViewData>().apply {
+                        add(
+                            CommentViewData(
+                                item.id,
+                                item.username,
+                                item.user_image_url,
+                                item.caption,
+                                TimeUtils.convertTimeFormat(item.created_at)
+                            )
+                        )
+
+                        item.comments.forEach {
+                            add(
+                                CommentViewData(
+                                    it.id,
+                                    "" + it.user_id,
+                                    "",//it.user_image_url,
+                                    it.text,
+                                    TimeUtils.convertTimeFormat(it.created_at)
+                                )
+                            )
+                        }
+                    }
+                }?.run {
+                    emit(
+                        DataResult(
+                            DataResult.State.SUCCESS,
+                            (this as List<CommentViewData>),
+                            null
+                        )
+                    )
+                }
+            } else {
+                emit(DataResult<List<CommentViewData>>(result.state, null, result.errorMessage))
+            }
+        }
 }
+
+
